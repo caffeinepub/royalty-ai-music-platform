@@ -1,0 +1,40 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-17T23:55:10.386Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 1,
+    "implemented": 1,
+    "items": [
+      {
+        "id": "REQ-23",
+        "summary": "When an admin session is active, treat the admin as being on the “Full Package” plan for all user-facing plan displays and plan-derived UI state (e.g., the dashboard “Current Plan” card), so the admin never appears to be operating under the Free plan.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/lib/planUtils.ts",
+          "frontend/src/pages/UserDashboardPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/lib/planUtils.ts",
+          "frontend/src/pages/UserDashboardPage.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/lib/planUtils.ts",
+    "frontend/src/pages/UserDashboardPage.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

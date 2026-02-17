@@ -1,0 +1,39 @@
+{
+  "kind": "build_request",
+  "title": "Show admins as Full Package with unlimited access across user-facing UI",
+  "projectName": "ROYALTY AI",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-23",
+      "text": "When an admin session is active, treat the admin as being on the “Full Package” plan for all user-facing plan displays and plan-derived UI state (e.g., the dashboard “Current Plan” card), so the admin never appears to be operating under the Free plan.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Everything seems right except as the admin I would like to operate not under the free plan but under the full package unlimited access to everything"
+        ]
+      },
+      "acceptanceCriteria": [
+        "With an active admin session, the User Dashboard “Current Plan” value displays “Full Package” (or clearly indicates Full Package via admin context) even if the stored profile plan is Free.",
+        "With an active admin session, any plan-derived labels/badges that reflect the user’s tier use an effective plan equivalent to Full Package, avoiding any visible “Free plan” labeling for admins.",
+        "This change does not modify the stored plan tier in the user profile; ending the admin session returns the UI to showing the actual saved plan tier for that principal."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit files under frontend/src/components/ui (read-only).",
+    "Do not change immutable frontend hook files listed in SYSTEM_CONTEXT.",
+    "Backend remains a single Motoko actor; do not introduce additional backend services."
+  ],
+  "nonGoals": [
+    "Do not change admin authentication requirements (admin still requires admin password session, and admin dashboard still requires Internet Identity).",
+    "Do not automatically upgrade non-admin users or change billing/pricing logic."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 11,
+  "summary": "Expand the ROYALTY AI Music Platform from primarily UI/simulated music tools to a fully functional platform where admins and users can actually create/upload content and use real mixing/mastering features, in addition to fixing remaining admin post-login display issues.",
+  "architectural_notes": [
+    "Initial concept is a 3-page static HTML/CSS/JS site (landing, admin dashboard, user dashboard) with user data stored in browser localStorage; production version may later need a real backend for auth/data/payments.",
+    "Admin sessions should operate with Full Package / unlimited access (bypass plan tier gating and usage limits) rather than defaulting to the Free plan."
+  ],
+  "known_issues": [
+    "Sign-in flow is not working in production (user reports it won’t sign in / won’t allow starting to use the app).",
+    "Admin login is not working for the user when entering the admin password `RoyaltyAdmin2026!` (cannot log in and use the site as admin).",
+    "After successful admin login, nothing loads/pops up (admin sees a blank or non-updating view instead of the admin dashboard/content)."
+  ],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-a-responsive-landing-page-for-royalty-ai-music-platform-that-matches-the-provided-cyberpunk-neon-concept-hero-section-with-headline-subheadline-primary-ctas-start-creating-free-view-plans-features-section-ai-music-creator-mix-master-voice-transform-distribute-fast-processing-studio-quality-pricing-section-with-four-tiers-free-creator-19-studio-29-full-package-39-and-footer-copyright-text",
+      "title": "Create a responsive landing page for “ROYALTY™ AI Music Platform” that matches the provided cyberpunk/neon concept: hero section with headline/subheadline, primary CTAs (“Start Creating Free”, “View Plans”), features section (AI Music Creator, Mix & Master, Voice Transform, Distribute, Fast Processing, Studio Quality), pricing section with four tiers (Free, Creator $19, Studio $29, Full Package $39), and footer copyright text.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-authentication-using-internet-identity-for-end-users-with-an-in-app-login-signup-modal-ux-similar-to-the-static-html-concept-tabs-for-user-vs-admin-after-successful-user-sign-in-route-the-user-to-the-user-dashboard",
+      "title": "Implement authentication using Internet Identity for end users, with an in-app login/signup modal UX similar to the static HTML concept (tabs for User vs Admin). After successful user sign-in, route the user to the user dashboard.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-admin-login-flow-in-the-same-login-modal-separate-admin-login-tab-that-validates-the-admin-password-exactly-as-provided-royaltyadmin2026-on-success-route-to-an-admin-dashboard-and-restrict-access-to-admin-only-views",
+      "title": "Add an admin login flow in the same login modal (separate “Admin Login” tab) that validates the admin password exactly as provided: `RoyaltyAdmin2026!`. On success, route to an admin dashboard and restrict access to admin-only views.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-user-dashboard-page-that-includes-a-personalized-welcome-account-statistics-a-tool-launcher-interface-for-the-music-tools-simulated-ui-only-plan-display-free-creator-studio-full-plan-based-feature-gating-prompts-and-an-upgrade-prompt-ui-consistent-with-the-tier-list",
+      "title": "Create a user dashboard page that includes: a personalized welcome, account statistics, a tool launcher interface for the music tools (simulated UI only), plan display (Free/Creator/Studio/Full), plan-based feature gating prompts, and an upgrade prompt UI consistent with the tier list.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-an-admin-dashboard-page-with-summary-statistics-at-least-total-users-users-by-plan-tier-and-a-revenue-estimate-derived-from-plan-prices-a-user-management-table-list-users-view-plan-change-user-plan-sidebar-navigation-layout-and-an-auto-refresh-mechanism-that-updates-the-displayed-statistics-periodically",
+      "title": "Create an admin dashboard page with: summary statistics (at least total users, users by plan tier, and a revenue estimate derived from plan prices), a user management table (list users, view plan, change user plan), sidebar navigation layout, and an auto-refresh mechanism that updates the displayed statistics periodically.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-consistent-cyberpunk-neon-visual-system-across-the-app-landing-modals-dashboards-neon-cyan-magenta-accents-dark-background-glassmorphism-panels-subtle-glow-effects-and-typography-pairing-similar-to-orbitron-display-space-mono-body",
+      "title": "Apply a consistent cyberpunk/neon visual system across the app (landing, modals, dashboards): neon cyan + magenta accents, dark background, glassmorphism panels, subtle glow effects, and typography pairing similar to Orbitron (display) + Space Mono (body).",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-static-generated-visual-assets-logo-wordmark-and-a-looping-tiling-neon-grid-background-and-use-them-in-the-ui-e-g-landing-hero-and-dashboard-backgrounds-from-frontend-static-assets-do-not-serve-images-via-backend",
+      "title": "Add static generated visual assets (logo/wordmark and a looping/tiling neon grid background) and use them in the UI (e.g., landing hero and dashboard backgrounds) from frontend static assets (do not serve images via backend).",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-user-sign-in-ux-so-that-clicking-sign-in-with-internet-identity-does-not-navigate-to-dashboard-until-the-internet-identity-session-has-actually-completed-and-an-identity-is-present-keep-the-auth-modal-open-and-show-an-in-progress-state-until-login-success-or-error",
+      "title": "Fix the user sign-in UX so that clicking “Sign in with Internet Identity” does not navigate to /dashboard until the Internet Identity session has actually completed and an identity is present; keep the auth modal open and show an in-progress state until login success or error.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-auth-modal-to-surface-internet-identity-login-errors-including-the-already-authenticated-case-to-the-user-in-english-and-avoid-silently-failing-in-the-console-only",
+      "title": "Update the auth modal to surface Internet Identity login errors (including the “already authenticated” case) to the user in English, and avoid silently failing in the console only.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-authenticated-actor-initialization-so-normal-end-users-are-not-blocked-by-admin-only-initialization-only-call-the-backend-access-control-initialization-using-the-url-parameter-secret-when-the-caffeineadmintoken-parameter-is-actually-present-and-non-empty-and-ensure-the-user-dashboard-data-fetching-path-works-for-a-newly-signed-in-user-without-any-admin-token-present",
+      "title": "Fix authenticated actor initialization so normal end users are not blocked by admin-only initialization: only call the backend access-control initialization using the URL parameter secret when the `caffeineAdminToken` parameter is actually present and non-empty, and ensure the user dashboard data-fetching path works for a newly signed-in user without any admin token present.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-admin-login-flow-so-that-entering-the-admin-password-royaltyadmin2026-reliably-creates-an-active-admin-session-and-allows-navigation-to-the-admin-dashboard-without-being-immediately-redirected-back-to-the-landing-page",
+      "title": "Fix the admin login flow so that entering the admin password `RoyaltyAdmin2026!` reliably creates an active admin session and allows navigation to the admin dashboard without being immediately redirected back to the landing page.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-require-internet-identity-authentication-for-admin-dashboard-usage-and-show-a-clear-english-error-state-when-an-admin-session-exists-but-the-user-is-not-signed-in-with-internet-identity-since-admin-dashboard-data-calls-require-an-authenticated-principal",
+      "title": "Require Internet Identity authentication for admin dashboard usage, and show a clear English error state when an admin session exists but the user is not signed in with Internet Identity (since admin dashboard data calls require an authenticated principal).",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-when-an-admin-session-is-active-treat-the-admin-as-having-full-unlocked-access-in-the-user-facing-experience-bypass-plan-gating-in-the-tool-launcher-and-hide-disable-plan-upgrade-prompts-so-the-admin-can-use-all-features-for-free-in-the-ui",
+      "title": "When an admin session is active, treat the admin as having full/unlocked access in the user-facing experience: bypass plan gating in the tool launcher and hide/disable plan upgrade prompts so the admin can use all features for free in the UI.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-post-admin-login-experience-so-the-admin-always-sees-a-rendered-page-state-after-navigating-to-admin-no-blank-screen-including-a-clear-in-app-message-when-the-admin-password-session-is-active-but-internet-identity-is-not-signed-in",
+      "title": "Fix the post-admin-login experience so the admin always sees a rendered page state after navigating to /admin (no blank screen), including a clear in-app message when the admin password session is active but Internet Identity is not signed in.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-admin-friendly-onboarding-prompt-in-the-admin-login-flow-explaining-that-admin-capabilities-require-both-1-the-admin-password-session-and-2-internet-identity-sign-in-and-provide-a-one-click-action-to-start-internet-identity-sign-in-from-the-admin-context",
+      "title": "Add an admin-friendly onboarding prompt in the Admin Login flow explaining that admin capabilities require both (1) the admin password session and (2) Internet Identity sign-in, and provide a one-click action to start Internet Identity sign-in from the admin context.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-functional-audio-upload-and-library-experience-for-authenticated-users-and-admins-so-they-can-upload-audio-files-see-a-list-of-uploaded-items-and-select-one-to-open-in-a-tool",
+      "title": "Implement a functional audio upload and library experience for authenticated users (and admins) so they can upload audio files, see a list of uploaded items, and select one to open in a tool.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-functional-mix-master-tool-page-that-works-on-uploaded-audio-using-in-browser-processing-no-coming-soon-toast-for-this-tool-including-at-least-playback-volume-gain-control-simple-eq-e-g-3-band-and-export-download-of-the-processed-result",
+      "title": "Add a functional 'Mix & Master' tool page that works on uploaded audio using in-browser processing (no 'Coming Soon' toast for this tool), including at least: playback, volume/gain control, simple EQ (e.g., 3-band), and export/download of the processed result.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-wire-plan-gating-to-functional-tool-access-non-admin-users-can-only-access-tools-allowed-by-their-plan-while-admins-can-access-all-tools-regardless-of-plan-ensure-locked-tools-have-a-clear-english-explanation-and-upgrade-prompt",
+      "title": "Wire plan gating to functional tool access: non-admin users can only access tools allowed by their plan, while admins can access all tools regardless of plan; ensure locked tools have a clear English explanation and upgrade prompt.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-when-an-admin-session-is-active-treat-the-admin-as-being-on-the-full-package-plan-for-all-user-facing-plan-displays-and-plan-derived-ui-state-e-g-the-dashboard-current-plan-card-so-the-admin-never-appears-to-be-operating-under-the-free-plan",
+      "title": "When an admin session is active, treat the admin as being on the “Full Package” plan for all user-facing plan displays and plan-derived UI state (e.g., the dashboard “Current Plan” card), so the admin never appears to be operating under the Free plan.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create the ROYALTY AI Music Platform app (landing page + signup/login + user dashboard + admin dashboard) based on the provided deployment guide and feature set.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Implement backend data storage in the single Motoko actor for: user profiles, current plan tier, and basic usage counters (e.g., exports used this month) sufficient to support the dashboard UI and plan gating. Ensure data persists across canister upgrades using stable structures.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Ensure backend authorization allows a newly authenticated Internet Identity principal to use the core user flows (get/save caller profile and export usage) without requiring admin privileges; if the access-control mixin requires explicit user-role granting, add a safe self-registration path for authenticated callers so they can be granted the #user permission automatically on first use.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Allow authenticated admins (via Admin Login password `RoyaltyAdmin2026!`) to have full/unlimited access to all app features regardless of plan tier (admin bypass for feature gating/usage limits) and retain ability to manage/change settings/users via admin capabilities.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Add an admin bypass on the backend so that authenticated admins are not blocked by export usage limits (admins should never trap due to exports running out when using exports).",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Implement fully functional music tools (beyond simulated UI): allow admins/users to upload audio/content and perform real mixing/mastering/creation actions so the site is fully usable, with admins having full access to all features.",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Extend the Motoko backend (single actor) with stable-persistent storage for user-owned audio items (metadata + file data) and APIs to upload, list, fetch, and delete audio, enforcing that callers can only access their own audio unless the caller is an authenticated admin.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "ROYALTY AI Music Platform",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

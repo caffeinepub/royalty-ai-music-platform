@@ -1,0 +1,25 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-17T23:55:10.383Z",
+  "summary": "REQ-23 is implemented for the User Dashboard “Current Plan” display by introducing an effective-plan helper that maps any active admin session to the Full Package plan for UI display without altering stored profile plan data. However, the diff evidence only shows this applied in UserDashboardPage and does not demonstrate that *all* user-facing plan displays and plan-derived labels/badges across the broader UI use the effective plan.",
+  "missing_requirements": [
+    {
+      "id": "REQ-23",
+      "requirement": "When an admin session is active, treat the admin as being on the “Full Package” plan for all user-facing plan displays and plan-derived UI state (labels/badges), so the admin never appears to be operating under the Free plan.",
+      "reason": "The diff shows effective-plan logic and updated display on the User Dashboard page, but does not provide evidence that other user-facing plan displays and plan-derived labels/badges throughout the UI were switched to use the effective plan (only UserDashboardPage.tsx is shown as updated).",
+      "evidence": [
+        "frontend/src/pages/UserDashboardPage.tsx",
+        "frontend/src/lib/planUtils.ts"
+      ]
+    }
+  ],
+  "hallucinated_features": [],
+  "confidence": 0.66,
+  "changed_files": [
+    "frontend-file-summaries.txt",
+    "frontend/src/lib/planUtils.ts",
+    "frontend/src/pages/UserDashboardPage.tsx",
+    "project_state.json"
+  ]
+}

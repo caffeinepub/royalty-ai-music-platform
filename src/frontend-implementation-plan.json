@@ -1,0 +1,28 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Admin sessions render as Full Package across user-facing plan UI",
+  "requirements": [
+    {
+      "id": "REQ-23",
+      "summary": "When an admin session is active, show an effective plan of Full Package across all user-facing plan displays and plan-derived UI state without changing the stored plan.",
+      "acceptanceCriteria": [
+        "With an active admin session, the User Dashboard “Current Plan” value displays “Full Package” (or clearly indicates Full Package via admin context) even if the stored profile plan is Free.",
+        "With an active admin session, any plan-derived labels/badges that reflect the user’s tier use an effective plan equivalent to Full Package, avoiding any visible “Free plan” labeling for admins.",
+        "This change does not modify the stored plan tier in the user profile; ending the admin session returns the UI to showing the actual saved plan tier for that principal."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/lib/planUtils.ts",
+          "operation": "modify",
+          "description": "Add a small helper (e.g., getEffectivePlan / getEffectivePlanDisplayName) that maps to PlanType.full whenever admin session context is active, while keeping existing display-name mapping intact for non-admin sessions. Use the authorization component’s admin-session context as the signal for the override; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/UserDashboardPage.tsx",
+          "operation": "modify",
+          "description": "Compute and use an effective plan for all plan UI when isAdminSessionActive is true: update the “Current Plan” card to display the effective plan display name (Full Package for admins) and pass the effective plan through to plan-derived child UI (e.g., ToolLauncher / UpgradePlanCard) to prevent any Free-plan labeling during admin sessions. Ensure only UI state changes (no profile plan mutation). Use the authorization component’s admin-session context (useAdminSession) as the source of truth for admin mode; verify the component's usage instructions before implementing."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-when-an-admin-session-is-active-treat-the-admin-as-being-on-the-full-package-plan-for-all-user-facing-plan-displays-and-plan-derived-ui-state-e-g-the-dashboard-current-plan-card-so-the-admin-never-appears-to-be-operating-under-the-free-plan",
+      "featureTitle": "When an admin session is active, treat the admin as being on the “Full Package” plan for all user-facing plan displays and plan-derived UI state (e.g., the dashboard “Current Plan” card), so the admin never appears to be operating under the Free plan.",
+      "files": [
+        "frontend/src/lib/planUtils.ts",
+        "frontend/src/pages/UserDashboardPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-23"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
