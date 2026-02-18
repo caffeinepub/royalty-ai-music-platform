@@ -1,37 +1,64 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T23:55:10.386Z",
+  "generatedAt": "2026-02-18T00:59:33.648Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
+    "total": 2,
     "implemented": 1,
     "items": [
       {
-        "id": "REQ-23",
-        "summary": "When an admin session is active, treat the admin as being on the “Full Package” plan for all user-facing plan displays and plan-derived UI state (e.g., the dashboard “Current Plan” card), so the admin never appears to be operating under the Free plan.",
+        "id": "REQ-24",
+        "summary": "Update the Motoko backend so that an authenticated admin principal can use core user flows (profile + exports + audio library) without being blocked by `#user` permission checks, and ensure access-control initialization does not break authenticated usage when the secret is empty.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-25",
+        "summary": "Improve frontend error handling so that when an admin signs in (admin password session + Internet Identity) but backend calls are still blocked (e.g., due to missing backend admin authorization), the UI shows a clear English error state explaining what is missing and how to proceed, rather than appearing non-functional.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/lib/planUtils.ts",
+          "frontend/src/utils/authzErrors.ts",
+          "frontend/src/components/AuthorizationErrorState.tsx",
+          "frontend/src/hooks/useAdminData.ts",
+          "frontend/src/pages/AdminDashboardPage.tsx",
+          "frontend/src/hooks/useAudioLibrary.ts",
+          "frontend/src/pages/MyAudioPage.tsx",
+          "frontend/src/pages/MixMasterPage.tsx",
           "frontend/src/pages/UserDashboardPage.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/lib/planUtils.ts",
+          "frontend/src/utils/authzErrors.ts",
+          "frontend/src/components/AuthorizationErrorState.tsx",
+          "frontend/src/hooks/useAdminData.ts",
+          "frontend/src/pages/AdminDashboardPage.tsx",
+          "frontend/src/hooks/useAudioLibrary.ts",
+          "frontend/src/pages/MyAudioPage.tsx",
+          "frontend/src/pages/MixMasterPage.tsx",
           "frontend/src/pages/UserDashboardPage.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/lib/planUtils.ts",
+    "frontend/src/components/AuthorizationErrorState.tsx",
+    "frontend/src/hooks/useAdminData.ts",
+    "frontend/src/hooks/useAudioLibrary.ts",
+    "frontend/src/hooks/useCurrentUserProfile.ts",
+    "frontend/src/pages/AdminDashboardPage.tsx",
+    "frontend/src/pages/MixMasterPage.tsx",
+    "frontend/src/pages/MyAudioPage.tsx",
     "frontend/src/pages/UserDashboardPage.tsx",
+    "frontend/src/utils/authzErrors.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

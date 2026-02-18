@@ -1,11 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Ensure admins are shown as having “Full Package” (unlimited access) across all user-facing plan displays and plan-derived UI, without changing the saved plan tier.
+**Goal:** Allow authenticated admins to use core app user flows without being blocked by user-only permission checks, and show clear frontend errors when admin authorization is missing.
 
 **Planned changes:**
-- Add an “effective plan” UI layer for active admin sessions that resolves to “Full Package” for all plan labels/badges and plan-derived state shown in the user-facing interface.
-- Update the User Dashboard “Current Plan” display (and any similar plan indicators) to use the effective plan when an admin session is active.
-- Ensure ending the admin session restores UI plan displays to the actual stored profile plan tier.
+- Update the Motoko backend access-control logic so authenticated admin principals can call core user-flow methods (profile, exports, audio library) without trapping on `#user` permission checks.
+- Ensure the backend access-control initialization entrypoint does not trap or break subsequent authenticated usage when invoked with an empty secret.
+- Keep non-admin principals restricted from admin-only endpoints.
+- Improve frontend error handling on Admin Dashboard and user tool pages to show clear, English, actionable authorization errors (including retry) when backend calls are blocked, without modifying immutable frontend paths (including `frontend/src/hooks/useActor.ts`).
 
-**User-visible outcome:** When logged in with an active admin session, the dashboard and other user-facing areas show the admin as on “Full Package” (not Free); when the admin session ends, the UI returns to showing the true saved plan.
+**User-visible outcome:** Admins can sign in and use profile, exports, and audio library features normally; if backend admin authorization is missing, the UI displays a clear English message with next steps (e.g., using `caffeineAdminToken`) and a way to retry instead of appearing non-functional.

@@ -1,25 +1,88 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T23:55:10.383Z",
-  "summary": "REQ-23 is implemented for the User Dashboard “Current Plan” display by introducing an effective-plan helper that maps any active admin session to the Full Package plan for UI display without altering stored profile plan data. However, the diff evidence only shows this applied in UserDashboardPage and does not demonstrate that *all* user-facing plan displays and plan-derived labels/badges across the broader UI use the effective plan.",
+  "generatedAt": "2026-02-18T00:59:33.644Z",
+  "summary": "REQ-25 (frontend auth/authorization error states) appears largely implemented via a new reusable AuthorizationErrorState component and authz error parsing, and is wired into several pages (Admin dashboard gating, User dashboard, My Audio). REQ-24 (backend admin bypass + empty-secret init safety) is only partially evidenced: profile methods now allow admin principals, but other required methods and the empty-secret initialization behavior are not shown in the truncated backend diff, so they cannot be verified as implemented.",
   "missing_requirements": [
     {
-      "id": "REQ-23",
-      "requirement": "When an admin session is active, treat the admin as being on the “Full Package” plan for all user-facing plan displays and plan-derived UI state (labels/badges), so the admin never appears to be operating under the Free plan.",
-      "reason": "The diff shows effective-plan logic and updated display on the User Dashboard page, but does not provide evidence that other user-facing plan displays and plan-derived labels/badges throughout the UI were switched to use the effective plan (only UserDashboardPage.tsx is shown as updated).",
+      "id": "REQ-24",
+      "requirement": "Admin principal can call all core user-flow methods without trapping on `#user` permission checks: `getCallerUserProfile`, `saveCallerUserProfile`, `useExport`, `addAudioFile`, `getCallerAudioFiles`, `deleteAudioFile`.",
+      "reason": "Only `getCallerUserProfile` and `saveCallerUserProfile` are shown updated to allow `isAdmin(...)`. The `useExport` change is truncated, and the audio-library methods are not shown in the backend diff, so admin bypass for those methods cannot be confirmed from the provided diff summary.",
       "evidence": [
-        "frontend/src/pages/UserDashboardPage.tsx",
-        "frontend/src/lib/planUtils.ts"
+        "backend/main.mo (truncated around getCallerUserProfile/saveCallerUserProfile; useExport truncated; no visible addAudioFile/getCallerAudioFiles/deleteAudioFile definitions)"
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "requirement": "Backend admin bypass remains in effect for exports (admins never trap due to exports running out).",
+      "reason": "The `useExport` function body is truncated right after the modified authorization condition starts; there is no visible logic showing that export-limit enforcement is bypassed for admins.",
+      "evidence": [
+        "backend/main.mo (useExport truncated)"
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "requirement": "Calling the backend access-control initialization entrypoint with an empty secret (\"\") does not trap and does not prevent subsequent backend calls for authenticated users/admins.",
+      "reason": "The diff summary does not show any access-control initialization entrypoint implementation or any change handling an empty secret. With the backend file truncated, this behavior cannot be verified.",
+      "evidence": [
+        "backend/main.mo (no visible initialization entrypoint / empty-secret handling in provided excerpt)"
+      ]
+    },
+    {
+      "id": "REQ-25",
+      "requirement": "On the Admin Dashboard page, if admin data queries fail due to authorization, render a visible in-app English message indicating backend admin authorization is missing and the admin may need to open the app with the `caffeineAdminToken` URL parameter (and provide a Retry action).",
+      "reason": "The diff shows general authorization-error parsing that includes a `caffeineAdminToken` hint, but the provided AdminDashboardPage excerpt is truncated before any explicit rendering of an authorization-failure state for `statsError`/`usersError` is shown, so the acceptance-criteria-specific UI behavior cannot be fully confirmed from the excerpt.",
+      "evidence": [
+        "frontend/src/utils/authzErrors.ts (hint mentions `caffeineAdminToken`)",
+        "frontend/src/pages/AdminDashboardPage.tsx (truncated; queries capture statsError/usersError but error rendering not shown)"
       ]
     }
   ],
-  "hallucinated_features": [],
-  "confidence": 0.66,
+  "hallucinated_features": [
+    {
+      "description": "Added/expanded Mix & Master tool page and related audio processing behavior beyond error-handling improvements.",
+      "reason": "Not requested by REQ-24/REQ-25; BuildRequest is specifically about fixing admin sign-in usability and authorization/error handling, and lists unrelated tool additions as non-goals.",
+      "evidence": [
+        "frontend/src/pages/MixMasterPage.tsx (modified; includes audio processing/load/play/export UI)",
+        "frontend-file-summaries.txt (mentions new routes for My Audio and Mix & Master pages, and functional mixing/mastering features)",
+        "project_state.json summary (mentions expanding to fully functional mixing/mastering features)"
+      ]
+    },
+    {
+      "description": "Introduced/modified broad cyberpunk/neon styling system (CSS/ Tailwind config / fonts).",
+      "reason": "Not requested for admin sign-in unblock or authorization error UX; outside the scoped requirements.",
+      "evidence": [
+        "frontend-file-summaries.txt (frontend/src/index.css, frontend/tailwind.config.js, frontend/index.html)"
+      ]
+    },
+    {
+      "description": "Changed/expanded landing page features/pricing UI content.",
+      "reason": "Not requested; BuildRequest explicitly lists changing pricing tiers/plan definitions/tools as non-goals.",
+      "evidence": [
+        "frontend-file-summaries.txt (frontend/src/pages/LandingPage.tsx, FeaturesSection, PricingSection)"
+      ]
+    },
+    {
+      "description": "Enhanced authentication modal with additional admin onboarding flow beyond required error handling.",
+      "reason": "REQ-25 focuses on showing clear error states when backend calls are blocked; adding an expanded onboarding flow is not explicitly requested.",
+      "evidence": [
+        "frontend-file-summaries.txt (frontend/src/components/AuthModal.tsx: “admin onboarding flow…”)"
+      ]
+    }
+  ],
+  "confidence": 0.64,
   "changed_files": [
+    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/lib/planUtils.ts",
+    "frontend/src/components/AuthorizationErrorState.tsx",
+    "frontend/src/hooks/useAdminData.ts",
+    "frontend/src/hooks/useAudioLibrary.ts",
+    "frontend/src/hooks/useCurrentUserProfile.ts",
+    "frontend/src/pages/AdminDashboardPage.tsx",
+    "frontend/src/pages/MixMasterPage.tsx",
+    "frontend/src/pages/MyAudioPage.tsx",
     "frontend/src/pages/UserDashboardPage.tsx",
+    "frontend/src/utils/authzErrors.ts",
     "project_state.json"
   ]
 }

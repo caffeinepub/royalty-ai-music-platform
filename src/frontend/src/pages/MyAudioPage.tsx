@@ -4,6 +4,7 @@ import AppShell from '@/components/AppShell';
 import HeaderNav from '@/components/HeaderNav';
 import AudioUploadCard from '@/components/AudioUploadCard';
 import MyAudioList from '@/components/MyAudioList';
+import AuthorizationErrorState from '@/components/AuthorizationErrorState';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
 import { useGetCallerAudioFiles } from '@/hooks/useAudioLibrary';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,7 +19,7 @@ export default function MyAudioPage() {
   const isAuthenticated = !!identity;
   const isLoggingIn = loginStatus === 'logging-in';
 
-  const { data: audioFiles, isLoading } = useGetCallerAudioFiles();
+  const { data: audioFiles, isLoading, error, refetch } = useGetCallerAudioFiles();
 
   const handleLogin = async () => {
     try {
@@ -75,6 +76,39 @@ export default function MyAudioPage() {
     );
   }
 
+  // Show error state if audio library query failed
+  if (error) {
+    return (
+      <AppShell>
+        <HeaderNav />
+        <div className="container max-w-6xl mx-auto px-4 py-8">
+          <div className="mb-8">
+            <Button
+              variant="ghost"
+              onClick={() => navigate({ to: '/dashboard' })}
+              className="mb-4"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Dashboard
+            </Button>
+            <h1 className="text-4xl font-bold mb-2">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-600">
+                My Audio Library
+              </span>
+            </h1>
+            <p className="text-muted-foreground">Upload and manage your audio files</p>
+          </div>
+
+          <AuthorizationErrorState
+            error={error}
+            onRetry={() => refetch()}
+            variant="card"
+          />
+        </div>
+      </AppShell>
+    );
+  }
+
   return (
     <AppShell>
       <HeaderNav />
@@ -107,10 +141,12 @@ export default function MyAudioPage() {
                 <CardHeader>
                   <CardTitle>Your Audio Files</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <Skeleton className="h-24 w-full" />
-                  <Skeleton className="h-24 w-full" />
-                  <Skeleton className="h-24 w-full" />
+                <CardContent>
+                  <div className="space-y-4">
+                    <Skeleton className="h-20 w-full" />
+                    <Skeleton className="h-20 w-full" />
+                    <Skeleton className="h-20 w-full" />
+                  </div>
                 </CardContent>
               </Card>
             ) : (

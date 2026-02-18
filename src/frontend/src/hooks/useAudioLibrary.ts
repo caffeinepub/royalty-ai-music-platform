@@ -12,6 +12,7 @@ export function useGetCallerAudioFiles() {
       return actor.getCallerAudioFiles();
     },
     enabled: !!actor && !actorFetching,
+    retry: false, // Don't retry on authorization failures
   });
 }
 

@@ -36,6 +36,7 @@ export function useGetAdminStats(enabled: boolean = true) {
       };
     },
     enabled: !!actor && !actorFetching && enabled,
+    retry: false, // Don't retry on authorization failures
   });
 }
 
@@ -56,6 +57,7 @@ export function useGetAllUsersWithProfiles(enabled: boolean = true) {
       }));
     },
     enabled: !!actor && !actorFetching && enabled,
+    retry: false, // Don't retry on authorization failures
   });
 }
 

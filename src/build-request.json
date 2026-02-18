@@ -1,39 +1,70 @@
 {
   "kind": "build_request",
-  "title": "Show admins as Full Package with unlimited access across user-facing UI",
-  "projectName": "ROYALTY AI",
-  "priority": "normal",
+  "title": "Fix admin sign-in so admins can use the app instead of being blocked",
+  "projectName": "ROYALTY AI Music",
+  "priority": "high",
   "requirements": [
     {
-      "id": "REQ-23",
-      "text": "When an admin session is active, treat the admin as being on the “Full Package” plan for all user-facing plan displays and plan-derived UI state (e.g., the dashboard “Current Plan” card), so the admin never appears to be operating under the Free plan.",
-      "target": "frontend",
+      "id": "REQ-24",
+      "text": "Update the Motoko backend so that an authenticated admin principal can use core user flows (profile + exports + audio library) without being blocked by `#user` permission checks, and ensure access-control initialization does not break authenticated usage when the secret is empty.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-5"
         ],
         "quotes": [
-          "Everything seems right except as the admin I would like to operate not under the free plan but under the full package unlimited access to everything"
+          "Now it's not allowing my to do anything when I sign in as the admin"
         ]
       },
       "acceptanceCriteria": [
-        "With an active admin session, the User Dashboard “Current Plan” value displays “Full Package” (or clearly indicates Full Package via admin context) even if the stored profile plan is Free.",
-        "With an active admin session, any plan-derived labels/badges that reflect the user’s tier use an effective plan equivalent to Full Package, avoiding any visible “Free plan” labeling for admins.",
-        "This change does not modify the stored plan tier in the user profile; ending the admin session returns the UI to showing the actual saved plan tier for that principal."
+        "When calling backend methods as an admin principal, the following methods do not trap with \"Unauthorized: Only users...\": `getCallerUserProfile`, `saveCallerUserProfile`, `useExport`, `addAudioFile`, `getCallerAudioFiles`, `deleteAudioFile`.",
+        "Backend admin bypass remains in effect for exports (admins never trap due to exports running out).",
+        "Calling the backend access-control initialization entrypoint with an empty secret (\"\") does not trap and does not prevent subsequent backend calls for authenticated users/admins.",
+        "Non-admin principals still cannot access admin-only endpoints (e.g., `getAllUsers`, `getAllUserProfiles`, `updateUserPlan`, `getUserCountByPlan`)."
+      ]
+    },
+    {
+      "id": "REQ-25",
+      "text": "Improve frontend error handling so that when an admin signs in (admin password session + Internet Identity) but backend calls are still blocked (e.g., due to missing backend admin authorization), the UI shows a clear English error state explaining what is missing and how to proceed, rather than appearing non-functional.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-5"
+        ],
+        "quotes": [
+          "Now it's not allowing my to do anything when I sign in as the admin"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On the Admin Dashboard page, if admin data queries fail due to authorization (backend traps / rejects), render a visible in-app message in English indicating that backend admin authorization is missing and that the admin may need to open the app with the `caffeineAdminToken` URL parameter (do not crash or leave the page in a blank/non-updating state).",
+        "On the My Audio page and other user tool pages that rely on backend actor calls, if queries/mutations fail due to authorization, show a visible error message in English rather than silently failing (e.g., include the backend error message or a friendly mapped message like \"You do not have permission to perform this action\").",
+        "Error states provide a user-actionable next step (e.g., a Retry button that refetches the affected query).",
+        "No changes are made to immutable frontend paths (including `frontend/src/hooks/useActor.ts`)."
       ]
     }
   ],
   "constraints": [
-    "Do not edit files under frontend/src/components/ui (read-only).",
-    "Do not change immutable frontend hook files listed in SYSTEM_CONTEXT.",
-    "Backend remains a single Motoko actor; do not introduce additional backend services."
+    "Backend must remain a single Motoko actor (all logic in `backend/main.mo`).",
+    "Do not edit immutable frontend paths listed in SYSTEM_CONTEXT (must compose or add new code elsewhere).",
+    "All user-facing text introduced/updated must be in English."
   ],
   "nonGoals": [
-    "Do not change admin authentication requirements (admin still requires admin password session, and admin dashboard still requires Internet Identity).",
-    "Do not automatically upgrade non-admin users or change billing/pricing logic."
+    "Adding new authentication providers beyond Internet Identity.",
+    "Introducing external databases or additional backend services.",
+    "Changing pricing tiers, plan definitions, or adding new tools unrelated to fixing admin usability."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

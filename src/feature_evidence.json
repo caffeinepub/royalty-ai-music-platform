@@ -2,11 +2,17 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-when-an-admin-session-is-active-treat-the-admin-as-being-on-the-full-package-plan-for-all-user-facing-plan-displays-and-plan-derived-ui-state-e-g-the-dashboard-current-plan-card-so-the-admin-never-appears-to-be-operating-under-the-free-plan",
-      "featureTitle": "When an admin session is active, treat the admin as being on the “Full Package” plan for all user-facing plan displays and plan-derived UI state (e.g., the dashboard “Current Plan” card), so the admin never appears to be operating under the Free plan.",
+      "featureId": "feature-improve-frontend-error-handling-so-that-when-an-admin-signs-in-admin-password-session-internet-identity-but-backend-calls-are-still-blocked-e-g-due-to-missing-backend-admin-authorization-the-ui-shows-a-clear-english-error-state-explaining-what-is-missing-and-how-to-proceed-rather-than-appearing-non-functional",
+      "featureTitle": "Improve frontend error handling so that when an admin signs in (admin password session + Internet Identity) but backend calls are still blocked (e.g., due to missing backend admin authorization), the UI shows a clear English error state explaining what is missing and how to proceed, rather than appearing non-functional.",
       "files": [
-        "frontend/src/lib/planUtils.ts",
-        "frontend/src/pages/UserDashboardPage.tsx"
+        "frontend/src/components/AuthorizationErrorState.tsx",
+        "frontend/src/hooks/useAdminData.ts",
+        "frontend/src/hooks/useAudioLibrary.ts",
+        "frontend/src/pages/AdminDashboardPage.tsx",
+        "frontend/src/pages/MixMasterPage.tsx",
+        "frontend/src/pages/MyAudioPage.tsx",
+        "frontend/src/pages/UserDashboardPage.tsx",
+        "frontend/src/utils/authzErrors.ts"
       ],
       "components": [
         "authorization@4.0.0",
@@ -18,7 +24,7 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-23"
+        "REQ-25"
       ],
       "confidence": "high"
     }

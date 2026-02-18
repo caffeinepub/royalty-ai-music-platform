@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 11,
+  "projectStateVersion": 13,
   "summary": "Expand the ROYALTY AI Music Platform from primarily UI/simulated music tools to a fully functional platform where admins and users can actually create/upload content and use real mixing/mastering features, in addition to fixing remaining admin post-login display issues.",
   "architectural_notes": [
     "Initial concept is a 3-page static HTML/CSS/JS site (landing, admin dashboard, user dashboard) with user data stored in browser localStorage; production version may later need a real backend for auth/data/payments.",
@@ -9,9 +9,10 @@
   "known_issues": [
     "Sign-in flow is not working in production (user reports it won’t sign in / won’t allow starting to use the app).",
     "Admin login is not working for the user when entering the admin password `RoyaltyAdmin2026!` (cannot log in and use the site as admin).",
-    "After successful admin login, nothing loads/pops up (admin sees a blank or non-updating view instead of the admin dashboard/content)."
+    "After successful admin login, nothing loads/pops up (admin sees a blank or non-updating view instead of the admin dashboard/content).",
+    "After signing in as admin, the user reports they cannot do anything (admin session appears non-functional / actions blocked)."
   ],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-create-a-responsive-landing-page-for-royalty-ai-music-platform-that-matches-the-provided-cyberpunk-neon-concept-hero-section-with-headline-subheadline-primary-ctas-start-creating-free-view-plans-features-section-ai-music-creator-mix-master-voice-transform-distribute-fast-processing-studio-quality-pricing-section-with-four-tiers-free-creator-19-studio-29-full-package-39-and-footer-copyright-text",
@@ -164,6 +165,14 @@
         "REQ-23"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-improve-frontend-error-handling-so-that-when-an-admin-signs-in-admin-password-session-internet-identity-but-backend-calls-are-still-blocked-e-g-due-to-missing-backend-admin-authorization-the-ui-shows-a-clear-english-error-state-explaining-what-is-missing-and-how-to-proceed-rather-than-appearing-non-functional",
+      "title": "Improve frontend error handling so that when an admin signs in (admin password session + Internet Identity) but backend calls are still blocked (e.g., due to missing backend admin authorization), the UI shows a clear English error state explaining what is missing and how to proceed, rather than appearing non-functional.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -214,6 +223,14 @@
       "summary": "Extend the Motoko backend (single actor) with stable-persistent storage for user-owned audio items (metadata + file data) and APIs to upload, list, fetch, and delete audio, enforcing that callers can only access their own audio unless the caller is an authenticated admin.",
       "reqIds": [
         "REQ-22"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Update the Motoko backend so that an authenticated admin principal can use core user flows (profile + exports + audio library) without being blocked by `#user` permission checks, and ensure access-control initialization does not break authenticated usage when the secret is empty.",
+      "reqIds": [
+        "REQ-24"
       ],
       "status": "pending"
     }

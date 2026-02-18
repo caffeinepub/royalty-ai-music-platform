@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import AppShell from '@/components/AppShell';
 import HeaderNav from '@/components/HeaderNav';
+import AuthorizationErrorState from '@/components/AuthorizationErrorState';
 import { useGetCallerAudioFiles } from '@/hooks/useAudioLibrary';
 import { useExportUsage } from '@/hooks/useExportUsage';
 import { useAdminSession } from '@/hooks/useAdminSession';
@@ -19,7 +20,7 @@ import { processAudio, downloadAudio } from '@/lib/audioProcessing';
 export default function MixMasterPage() {
   const navigate = useNavigate();
   const search = useSearch({ strict: false }) as { audioTitle?: string };
-  const { data: audioFiles, isLoading } = useGetCallerAudioFiles();
+  const { data: audioFiles, isLoading, error, refetch } = useGetCallerAudioFiles();
   const { mutate: triggerExport, isPending: isExporting } = useExportUsage();
   const { isAdminSessionActive } = useAdminSession();
 
@@ -221,6 +222,39 @@ export default function MixMasterPage() {
         <div className="container max-w-4xl mx-auto px-4 py-8">
           <Skeleton className="h-12 w-64 mb-8" />
           <Skeleton className="h-96 w-full" />
+        </div>
+      </AppShell>
+    );
+  }
+
+  // Show error state if audio library query failed
+  if (error) {
+    return (
+      <AppShell>
+        <HeaderNav />
+        <div className="container max-w-4xl mx-auto px-4 py-8">
+          <div className="mb-8">
+            <Button
+              variant="ghost"
+              onClick={() => navigate({ to: '/dashboard' })}
+              className="mb-4"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Dashboard
+            </Button>
+            <h1 className="text-4xl font-bold mb-2">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-600">
+                Mix & Master
+              </span>
+            </h1>
+            <p className="text-muted-foreground">Professional audio mixing and mastering tools</p>
+          </div>
+
+          <AuthorizationErrorState
+            error={error}
+            onRetry={() => refetch()}
+            variant="card"
+          />
         </div>
       </AppShell>
     );

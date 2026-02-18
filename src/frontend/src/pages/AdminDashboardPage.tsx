@@ -3,6 +3,7 @@ import { useNavigate } from '@tanstack/react-router';
 import AppShell from '@/components/AppShell';
 import AdminSidebar from '@/components/AdminSidebar';
 import UserManagementTable from '@/components/UserManagementTable';
+import AuthorizationErrorState from '@/components/AuthorizationErrorState';
 import { useAdminSession } from '@/hooks/useAdminSession';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
 import { useGetAdminStats, useGetAllUsersWithProfiles } from '@/hooks/useAdminData';
@@ -21,8 +22,8 @@ export default function AdminDashboardPage() {
   const isLoggingIn = loginStatus === 'logging-in';
   
   // Only enable queries when both admin session and Internet Identity are active
-  const { data: stats, isLoading: statsLoading, refetch: refetchStats } = useGetAdminStats(isAuthenticated);
-  const { data: usersData, isLoading: usersLoading, refetch: refetchUsers } = useGetAllUsersWithProfiles(isAuthenticated);
+  const { data: stats, isLoading: statsLoading, error: statsError, refetch: refetchStats } = useGetAdminStats(isAuthenticated);
+  const { data: usersData, isLoading: usersLoading, error: usersError, refetch: refetchUsers } = useGetAllUsersWithProfiles(isAuthenticated);
   const [autoRefresh, setAutoRefresh] = useState(true);
 
   useEffect(() => {
@@ -31,9 +32,9 @@ export default function AdminDashboardPage() {
     }
   }, [isAdminSessionActive, navigate]);
 
-  // Auto-refresh every 5 seconds (only when authenticated)
+  // Auto-refresh every 5 seconds (only when authenticated and no errors)
   useEffect(() => {
-    if (!autoRefresh || !isAuthenticated) return;
+    if (!autoRefresh || !isAuthenticated || statsError || usersError) return;
     
     const interval = setInterval(() => {
       refetchStats();
@@ -41,7 +42,7 @@ export default function AdminDashboardPage() {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [autoRefresh, isAuthenticated, refetchStats, refetchUsers]);
+  }, [autoRefresh, isAuthenticated, statsError, usersError, refetchStats, refetchUsers]);
 
   const handleManualRefresh = () => {
     refetchStats();
@@ -112,6 +113,38 @@ export default function AdminDashboardPage() {
                     </CardContent>
                   </Card>
                 </div>
+              </div>
+            </SidebarInset>
+          </div>
+        </AppShell>
+      </SidebarProvider>
+    );
+  }
+
+  // Show error state if admin data queries failed
+  if (statsError || usersError) {
+    return (
+      <SidebarProvider>
+        <AppShell>
+          <div className="flex min-h-screen w-full">
+            <AdminSidebar />
+            
+            <SidebarInset className="flex-1">
+              <div className="container max-w-7xl mx-auto px-4 py-8">
+                <div className="mb-8">
+                  <h1 className="text-4xl font-bold mb-2">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-600">
+                      Admin Dashboard
+                    </span>
+                  </h1>
+                  <p className="text-muted-foreground">Platform overview and user management</p>
+                </div>
+
+                <AuthorizationErrorState
+                  error={statsError || usersError}
+                  onRetry={handleManualRefresh}
+                  variant="card"
+                />
               </div>
             </SidebarInset>
           </div>
