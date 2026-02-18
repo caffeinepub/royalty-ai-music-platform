@@ -2,7 +2,7 @@
   "frontend/src/App.tsx": "Main application component with TanStack Router setup, improved route guards with loading skeletons, and new routes for My Audio and Mix & Master pages.",
   "frontend/src/pages/LandingPage.tsx": "Landing page with hero section, features showcase, pricing tiers, and authentication modal integration.",
   "frontend/src/pages/UserDashboardPage.tsx": "User dashboard with authorization error handling that displays clear error messages with retry functionality when profile queries fail; uses getPlanDisplayName on the computed effectivePlan instead of getEffectivePlanDisplayName.",
-  "frontend/src/pages/AdminDashboardPage.tsx": "Admin dashboard with Internet Identity requirement gate and authorization error handling that displays clear error messages with retry functionality when backend calls fail.",
+  "frontend/src/pages/AdminDashboardPage.tsx": "Admin dashboard with Internet Identity requirement gate and comprehensive authorization error handling that displays clear error messages with raw details and retry functionality when backend calls fail.",
   "frontend/src/components/AppShell.tsx": "Layout wrapper providing consistent background (animated neon grid) and structure for all pages.",
   "frontend/src/components/HeaderNav.tsx": "Sticky header navigation with ROYALTY wordmark, login/logout controls, and user/admin account dropdown menu.",
   "frontend/src/components/FeaturesSection.tsx": "Features grid showcasing six AI music platform capabilities with icons and descriptions.",
@@ -29,6 +29,6 @@
   "frontend/src/components/MyAudioList.tsx": "Audio library list component displaying uploaded files with playback controls, Mix & Master integration, and delete functionality; updated Tailwind CSS class from flex-shrink-0 to shrink-0.",
   "frontend/src/pages/MixMasterPage.tsx": "Mix & Master tool page with authorization error handling that displays clear error messages with retry functionality when audio library queries fail.",
   "frontend/src/lib/audioProcessing.ts": "Audio processing utilities for Web Audio API including offline rendering, 3-band EQ, gain control, and WAV encoding/download.",
-  "frontend/src/utils/authzErrors.ts": "Utility for parsing backend authorization errors and mapping them to user-friendly error messages with titles, descriptions, and actionable hints.",
-  "frontend/src/components/AuthorizationErrorState.tsx": "Reusable component that displays authorization and other errors with retry functionality, supporting both inline and card variants."
+  "frontend/src/utils/authzErrors.ts": "Enhanced error parsing utility that extracts raw error details, detects admin authorization requirements, and provides detailed instructions for using the caffeineAdminToken URL parameter to authorize admin principals.",
+  "frontend/src/components/AuthorizationErrorState.tsx": "Reusable error display component with copyable raw error details section, enhanced hint display with formatting, and retry functionality for both inline and card variants."
 }

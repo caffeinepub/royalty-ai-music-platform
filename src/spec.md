@@ -1,12 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Allow authenticated admins to use core app user flows without being blocked by user-only permission checks, and show clear frontend errors when admin authorization is missing.
+**Goal:** Make admin mode fully usable by preventing backend access-control initialization failures and by showing clear, actionable in-app error states when admin actions or data loads fail.
 
 **Planned changes:**
-- Update the Motoko backend access-control logic so authenticated admin principals can call core user-flow methods (profile, exports, audio library) without trapping on `#user` permission checks.
-- Ensure the backend access-control initialization entrypoint does not trap or break subsequent authenticated usage when invoked with an empty secret.
-- Keep non-admin principals restricted from admin-only endpoints.
-- Improve frontend error handling on Admin Dashboard and user tool pages to show clear, English, actionable authorization errors (including retry) when backend calls are blocked, without modifying immutable frontend paths (including `frontend/src/hooks/useActor.ts`).
+- Frontend: Add a consistent admin dashboard error state that renders an in-app error card when admin data fetches fail, showing an English message/title, raw error details in a copyable section, and a one-click Retry action to rerun the failed requests.
+- Frontend: Detect/admin-handle authorization-related failures and display a dedicated “Admin authorization required” message explaining that the Internet Identity principal is not authorized yet and that the app must be opened with the `caffeineAdminToken` parameter.
+- Backend: Harden access-control initialization so that providing an empty/missing `caffeineAdminToken` does not trap or block normal authenticated usage; keep existing behavior when a valid token is provided.
 
-**User-visible outcome:** Admins can sign in and use profile, exports, and audio library features normally; if backend admin authorization is missing, the UI displays a clear English message with next steps (e.g., using `caffeineAdminToken`) and a way to retry instead of appearing non-functional.
+**User-visible outcome:** Admins no longer hit a blank/broken dashboard due to “error code” failures; instead they see clear English error messages with copyable details and a Retry button, and authorization issues explicitly explain how to proceed (including the `caffeineAdminToken` requirement).

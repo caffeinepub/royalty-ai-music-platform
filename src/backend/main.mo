@@ -5,6 +5,7 @@ import Text "mo:core/Text";
 import Runtime "mo:core/Runtime";
 import Principal "mo:core/Principal";
 import List "mo:core/List";
+import Blob "mo:core/Blob";
 
 import Storage "blob-storage/Storage";
 import MixinStorage "blob-storage/Mixin";
@@ -46,14 +47,14 @@ actor {
   let audioFiles = Map.empty<Principal, List.List<AudioFile>>();
 
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user) or AccessControl.isAdmin(accessControlState, caller))) {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can access profiles");
     };
     userProfiles.get(caller);
   };
 
   public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user) or AccessControl.isAdmin(accessControlState, caller))) {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can save profiles");
     };
     userProfiles.add(caller, profile);
@@ -114,7 +115,7 @@ actor {
   };
 
   public shared ({ caller }) func useExport() : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user) or AccessControl.isAdmin(accessControlState, caller))) {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can use exports");
     };
     // Admin bypass: do not deduct exports for admins
@@ -150,7 +151,7 @@ actor {
   // Audio Library Functionality
 
   public shared ({ caller }) func addAudioFile(title : Text, description : Text, file : Storage.ExternalBlob) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user) or AccessControl.isAdmin(accessControlState, caller))) {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can upload audio files");
     };
     let audioFile : AudioFile = {
@@ -167,7 +168,7 @@ actor {
   };
 
   public query ({ caller }) func getCallerAudioFiles() : async [AudioFile] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user) or AccessControl.isAdmin(accessControlState, caller))) {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can access audio files");
     };
     switch (audioFiles.get(caller)) {
@@ -187,7 +188,7 @@ actor {
   };
 
   public shared ({ caller }) func deleteAudioFile(audioToDelete : AudioFile) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user) or AccessControl.isAdmin(accessControlState, caller))) {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can delete audio files");
     };
 

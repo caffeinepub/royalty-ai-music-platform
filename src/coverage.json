@@ -1,45 +1,50 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-18T00:59:33.648Z",
+  "generatedAt": "2026-02-18T01:19:57.328Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 1,
+    "total": 3,
+    "implemented": 2,
     "items": [
       {
-        "id": "REQ-24",
-        "summary": "Update the Motoko backend so that an authenticated admin principal can use core user flows (profile + exports + audio library) without being blocked by `#user` permission checks, and ensure access-control initialization does not break authenticated usage when the secret is empty.",
+        "id": "REQ-26",
+        "summary": "Update the admin experience to always show a clear, actionable in-app error state (in English) when an admin action fails, including when the backend returns an authorization/initialization error or “error code”. The UI must display: (1) a human-friendly title/message, (2) the raw error details (so the admin can report the exact code/message), and (3) a Retry action.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/AuthorizationErrorState.tsx",
+          "frontend/src/utils/authzErrors.ts",
+          "frontend/src/pages/AdminDashboardPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/AuthorizationErrorState.tsx",
+          "frontend/src/utils/authzErrors.ts",
+          "frontend/src/pages/AdminDashboardPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-27",
+        "summary": "Ensure the backend access-control initialization path does not break authenticated usage when the `caffeineAdminToken` secret is missing/empty. Specifically, calling the backend’s access-control initialization with an empty string must not trap or prevent the actor from being created and used for normal authenticated flows.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-25",
-        "summary": "Improve frontend error handling so that when an admin signs in (admin password session + Internet Identity) but backend calls are still blocked (e.g., due to missing backend admin authorization), the UI shows a clear English error state explaining what is missing and how to proceed, rather than appearing non-functional.",
+        "id": "REQ-28",
+        "summary": "When an admin has an active admin-password session and is signed in with Internet Identity but backend admin-only calls are rejected, show a dedicated ‘Admin authorization required’ error message that explicitly explains what is missing and how to proceed (in English), including mentioning the `caffeineAdminToken` requirement.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/utils/authzErrors.ts",
           "frontend/src/components/AuthorizationErrorState.tsx",
-          "frontend/src/hooks/useAdminData.ts",
-          "frontend/src/pages/AdminDashboardPage.tsx",
-          "frontend/src/hooks/useAudioLibrary.ts",
-          "frontend/src/pages/MyAudioPage.tsx",
-          "frontend/src/pages/MixMasterPage.tsx",
-          "frontend/src/pages/UserDashboardPage.tsx"
+          "frontend/src/pages/AdminDashboardPage.tsx"
         ],
         "matchedFiles": [
           "frontend/src/utils/authzErrors.ts",
           "frontend/src/components/AuthorizationErrorState.tsx",
-          "frontend/src/hooks/useAdminData.ts",
-          "frontend/src/pages/AdminDashboardPage.tsx",
-          "frontend/src/hooks/useAudioLibrary.ts",
-          "frontend/src/pages/MyAudioPage.tsx",
-          "frontend/src/pages/MixMasterPage.tsx",
-          "frontend/src/pages/UserDashboardPage.tsx"
+          "frontend/src/pages/AdminDashboardPage.tsx"
         ]
       }
     ]
@@ -51,13 +56,7 @@
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/src/components/AuthorizationErrorState.tsx",
-    "frontend/src/hooks/useAdminData.ts",
-    "frontend/src/hooks/useAudioLibrary.ts",
-    "frontend/src/hooks/useCurrentUserProfile.ts",
     "frontend/src/pages/AdminDashboardPage.tsx",
-    "frontend/src/pages/MixMasterPage.tsx",
-    "frontend/src/pages/MyAudioPage.tsx",
-    "frontend/src/pages/UserDashboardPage.tsx",
     "frontend/src/utils/authzErrors.ts",
     "project_state.json",
     "scratch/component-selection.json",

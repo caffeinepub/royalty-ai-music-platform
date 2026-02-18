@@ -123,6 +123,8 @@ export default function AdminDashboardPage() {
 
   // Show error state if admin data queries failed
   if (statsError || usersError) {
+    const error = statsError || usersError;
+    
     return (
       <SidebarProvider>
         <AppShell>
@@ -141,7 +143,7 @@ export default function AdminDashboardPage() {
                 </div>
 
                 <AuthorizationErrorState
-                  error={statsError || usersError}
+                  error={error}
                   onRetry={handleManualRefresh}
                   variant="card"
                 />

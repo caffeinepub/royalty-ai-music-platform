@@ -1,57 +1,72 @@
 {
   "kind": "build_request",
-  "title": "Fix admin sign-in so admins can use the app instead of being blocked",
-  "projectName": "ROYALTY AI Music",
+  "title": "Fix admin-blocking error so the app is fully usable in admin mode",
+  "projectName": "ROYALTY AI Music Platform",
   "priority": "high",
   "requirements": [
     {
-      "id": "REQ-24",
-      "text": "Update the Motoko backend so that an authenticated admin principal can use core user flows (profile + exports + audio library) without being blocked by `#user` permission checks, and ensure access-control initialization does not break authenticated usage when the secret is empty.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-5"
-        ],
-        "quotes": [
-          "Now it's not allowing my to do anything when I sign in as the admin"
-        ]
-      },
-      "acceptanceCriteria": [
-        "When calling backend methods as an admin principal, the following methods do not trap with \"Unauthorized: Only users...\": `getCallerUserProfile`, `saveCallerUserProfile`, `useExport`, `addAudioFile`, `getCallerAudioFiles`, `deleteAudioFile`.",
-        "Backend admin bypass remains in effect for exports (admins never trap due to exports running out).",
-        "Calling the backend access-control initialization entrypoint with an empty secret (\"\") does not trap and does not prevent subsequent backend calls for authenticated users/admins.",
-        "Non-admin principals still cannot access admin-only endpoints (e.g., `getAllUsers`, `getAllUserProfiles`, `updateUserPlan`, `getUserCountByPlan`)."
-      ]
-    },
-    {
-      "id": "REQ-25",
-      "text": "Improve frontend error handling so that when an admin signs in (admin password session + Internet Identity) but backend calls are still blocked (e.g., due to missing backend admin authorization), the UI shows a clear English error state explaining what is missing and how to proceed, rather than appearing non-functional.",
+      "id": "REQ-26",
+      "text": "Update the admin experience to always show a clear, actionable in-app error state (in English) when an admin action fails, including when the backend returns an authorization/initialization error or “error code”. The UI must display: (1) a human-friendly title/message, (2) the raw error details (so the admin can report the exact code/message), and (3) a Retry action.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-5"
+          "recent-messages-user-1"
         ],
         "quotes": [
-          "Now it's not allowing my to do anything when I sign in as the admin"
+          "And error code is popping up . I just want to be able to use my app fully as admin"
         ]
       },
       "acceptanceCriteria": [
-        "On the Admin Dashboard page, if admin data queries fail due to authorization (backend traps / rejects), render a visible in-app message in English indicating that backend admin authorization is missing and that the admin may need to open the app with the `caffeineAdminToken` URL parameter (do not crash or leave the page in a blank/non-updating state).",
-        "On the My Audio page and other user tool pages that rely on backend actor calls, if queries/mutations fail due to authorization, show a visible error message in English rather than silently failing (e.g., include the backend error message or a friendly mapped message like \"You do not have permission to perform this action\").",
-        "Error states provide a user-actionable next step (e.g., a Retry button that refetches the affected query).",
-        "No changes are made to immutable frontend paths (including `frontend/src/hooks/useActor.ts`)."
+        "When the admin dashboard fails to load data (stats/users), the page renders an error card (not a blank screen) with an English explanation and a visible raw error detail string.",
+        "The error UI includes a one-click Retry action that re-runs the failing fetches.",
+        "The raw error detail is readable/copyable (e.g., shown in a code-style block or a dedicated ‘Error details’ section)."
+      ]
+    },
+    {
+      "id": "REQ-27",
+      "text": "Ensure the backend access-control initialization path does not break authenticated usage when the `caffeineAdminToken` secret is missing/empty. Specifically, calling the backend’s access-control initialization with an empty string must not trap or prevent the actor from being created and used for normal authenticated flows.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "recent-messages-user-1"
+        ],
+        "quotes": [
+          "And error code is popping up . I just want to be able to use my app fully as admin"
+        ]
+      },
+      "acceptanceCriteria": [
+        "If the frontend calls the backend access-control initialization with an empty secret, the call succeeds (no trap) and subsequent authenticated calls (e.g., reading a profile, listing audio) continue to work.",
+        "If a valid `caffeineAdminToken` is provided, access-control initialization still works as before (no regression for enabling admin privileges)."
+      ]
+    },
+    {
+      "id": "REQ-28",
+      "text": "When an admin has an active admin-password session and is signed in with Internet Identity but backend admin-only calls are rejected, show a dedicated ‘Admin authorization required’ error message that explicitly explains what is missing and how to proceed (in English), including mentioning the `caffeineAdminToken` requirement.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages-user-1"
+        ],
+        "quotes": [
+          "I just want to be able to use my app fully as admin"
+        ]
+      },
+      "acceptanceCriteria": [
+        "In the admin dashboard, if data queries fail due to missing admin authorization, the rendered error state explicitly states that the Internet Identity principal is not authorized as an admin yet and that the app must be opened with the `caffeineAdminToken` parameter.",
+        "The error state is displayed inside the app UI (not console-only) and remains visible until the issue is resolved or the user navigates away.",
+        "The message uses plain English and does not rely on internal jargon (it should clearly distinguish: admin password session vs Internet Identity vs backend admin authorization)."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor (all logic in `backend/main.mo`).",
-    "Do not edit immutable frontend paths listed in SYSTEM_CONTEXT (must compose or add new code elsewhere).",
-    "All user-facing text introduced/updated must be in English."
+    "Do not edit files under frontend/src/hooks/useActor.ts (immutable path); implement fixes via backend hardening and/or by composing new frontend code in editable files.",
+    "Respect the single-actor Motoko backend architecture (all logic in backend/main.mo).",
+    "All user-facing text must be in English."
   ],
   "nonGoals": [
-    "Adding new authentication providers beyond Internet Identity.",
-    "Introducing external databases or additional backend services.",
-    "Changing pricing tiers, plan definitions, or adding new tools unrelated to fixing admin usability."
+    "Adding third-party authentication providers (only Internet Identity).",
+    "Adding external databases or non-Motoko backend services.",
+    "Implementing new subscription/payment flows."
   ],
   "imageRequirements": {
     "required": [],

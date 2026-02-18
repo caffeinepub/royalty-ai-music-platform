@@ -1,57 +1,57 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Admin-friendly authorization error states and retry UX",
+  "title": "Admin-mode usability: actionable in-app error states with raw details + admin authorization guidance",
   "requirements": [
     {
-      "id": "REQ-25",
-      "summary": "Add clear, actionable UI error states for admin/user pages when backend calls fail due to authorization, without modifying immutable frontend files.",
+      "id": "REQ-26",
+      "summary": "Ensure admin dashboard shows a clear in-app error card with human-friendly English text, raw error details, and a one-click Retry when admin data loads/actions fail.",
       "acceptanceCriteria": [
-        "On the Admin Dashboard page, if admin data queries fail due to authorization (backend traps / rejects), render a visible in-app message in English indicating that backend admin authorization is missing and that the admin may need to open the app with the `caffeineAdminToken` URL parameter (do not crash or leave the page in a blank/non-updating state).",
-        "On the My Audio page and other user tool pages that rely on backend actor calls, if queries/mutations fail due to authorization, show a visible error message in English rather than silently failing (e.g., include the backend error message or a friendly mapped message like \"You do not have permission to perform this action\").",
-        "Error states provide a user-actionable next step (e.g., a Retry button that refetches the affected query).",
-        "No changes are made to immutable frontend paths (including `frontend/src/hooks/useActor.ts`)."
+        "When the admin dashboard fails to load data (stats/users), the page renders an error card (not a blank screen) with an English explanation and a visible raw error detail string.",
+        "The error UI includes a one-click Retry action that re-runs the failing fetches.",
+        "The raw error detail is readable/copyable (e.g., shown in a code-style block or a dedicated ‘Error details’ section)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/utils/authzErrors.ts",
-          "operation": "create",
-          "description": "Create a small error-parsing/mapping utility to detect authorization-related backend failures (e.g., trap/reject messages containing \"Unauthorized\") and return a friendly English title/body plus an optional \"next step\" hint. Use guidance from the selected \"authorization\" component about handling authorization trap errors gracefully. Verify the component's usage instructions before implementing."
-        },
-        {
           "path": "frontend/src/components/AuthorizationErrorState.tsx",
-          "operation": "create",
-          "description": "Add a reusable presentational component that renders a visible in-app error message (English) and a Retry button callback. Use it across admin/user pages to avoid blank/non-updating states when actor calls are blocked. Use guidance from the selected \"authorization\" component about authorization error handling UX. Verify the component's usage instructions before implementing."
+          "operation": "modify",
+          "description": "Extend the existing error UI to always render (1) a human-friendly title/message, (2) a dedicated, readable raw error details section (code-style block) with a copy affordance, and (3) a Retry button when onRetry is provided. Use existing shadcn-ui primitives (Alert/Card/Button) for consistent styling. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/hooks/useAdminData.ts",
+          "path": "frontend/src/utils/authzErrors.ts",
           "operation": "modify",
-          "description": "Update admin data hooks to be UI-friendly on authorization failures: disable aggressive retries (set retry to false) and ensure errors propagate cleanly so the Admin Dashboard can render an AuthorizationErrorState with a Retry action (refetch)."
+          "description": "Enhance error parsing to produce both user-friendly text and a stable rawDetails string for display/copy (e.g., original message, serialized error object). Add lightweight classification helpers so callers can distinguish admin-authorization-required vs generic failure vs other authorization failures. Use guidance from the selected authorization component to handle backend trap/authorization errors gracefully. Verify the component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/pages/AdminDashboardPage.tsx",
           "operation": "modify",
-          "description": "Handle failed admin queries by rendering an in-app English error state (not a blank table/cards). If the failure is authorization-related, explicitly explain that backend admin authorization appears missing and instruct the admin to open the app with the `caffeineAdminToken` URL parameter, plus provide a Retry button that triggers refetch of stats/users. Use AuthorizationErrorState and authzErrors mapping. Use guidance from the selected \"authorization\" component about gracefully handling backend trap errors. Verify the component's usage instructions before implementing."
+          "description": "Ensure the admin dashboard error path passes enough context to render a clear error card with Retry that re-runs both failing queries and shows raw error details. Keep the error state visible in-app until navigation/refresh (no console-only failures)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-28",
+      "summary": "When admin password session + Internet Identity are active but admin-only backend calls are rejected, show a dedicated 'Admin authorization required' message that explains what’s missing and how to proceed, explicitly mentioning caffeineAdminToken.",
+      "acceptanceCriteria": [
+        "In the admin dashboard, if data queries fail due to missing admin authorization, the rendered error state explicitly states that the Internet Identity principal is not authorized as an admin yet and that the app must be opened with the `caffeineAdminToken` parameter.",
+        "The error state is displayed inside the app UI (not console-only) and remains visible until the issue is resolved or the user navigates away.",
+        "The message uses plain English and does not rely on internal jargon (it should clearly distinguish: admin password session vs Internet Identity vs backend admin authorization)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/utils/authzErrors.ts",
+          "operation": "modify",
+          "description": "Add explicit detection/mapping for admin-only rejection cases so the UI can show a dedicated 'Admin authorization required' title/message. The message must clearly distinguish: (1) admin password session (local UI gate), (2) Internet Identity sign-in, and (3) backend admin authorization; and must instruct opening the app with the `caffeineAdminToken` URL parameter. Use guidance from the selected authorization component for interpreting authorization failures from backend trap messages. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/hooks/useAudioLibrary.ts",
+          "path": "frontend/src/components/AuthorizationErrorState.tsx",
           "operation": "modify",
-          "description": "Adjust audio library query behavior to surface authorization failures predictably (e.g., set retry to false) and ensure consumers can render a visible error + Retry instead of silently failing."
+          "description": "Support rendering the dedicated 'Admin authorization required' state produced by the error parser, while still showing the raw error details section and Retry action. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/pages/MyAudioPage.tsx",
+          "path": "frontend/src/pages/AdminDashboardPage.tsx",
           "operation": "modify",
-          "description": "When the audio library query fails (especially authorization-related failures), render a visible in-app English error message (including either the backend message or a friendly mapped permission message) with a Retry button that refetches the audio list. Use AuthorizationErrorState and authzErrors mapping. Use guidance from the selected \"authorization\" component about gracefully handling authorization trap errors. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/MixMasterPage.tsx",
-          "operation": "modify",
-          "description": "Add visible error handling for failures to load the caller's audio list (authorization or other errors) so the page does not appear non-functional; provide a Retry action to refetch. Reuse AuthorizationErrorState and authzErrors mapping. Use guidance from the selected \"authorization\" component about handling authorization errors gracefully. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/UserDashboardPage.tsx",
-          "operation": "modify",
-          "description": "Replace the current \"return null\" path when the profile is missing with an explicit, visible English error/empty state when the profile query errored (especially authorization). Provide a Retry button to refetch the profile. Reuse AuthorizationErrorState and authzErrors mapping. Use guidance from the selected \"authorization\" component about handling authorization errors gracefully. Verify the component's usage instructions before implementing."
+          "description": "When admin dashboard queries fail due to missing backend admin authorization (despite admin session + Internet Identity), render the dedicated 'Admin authorization required' in-app message (including `caffeineAdminToken` instructions) and keep Retry available to re-run the failed fetches after the issue is corrected."
         }
       ]
     }

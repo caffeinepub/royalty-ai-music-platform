@@ -2,16 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-improve-frontend-error-handling-so-that-when-an-admin-signs-in-admin-password-session-internet-identity-but-backend-calls-are-still-blocked-e-g-due-to-missing-backend-admin-authorization-the-ui-shows-a-clear-english-error-state-explaining-what-is-missing-and-how-to-proceed-rather-than-appearing-non-functional",
-      "featureTitle": "Improve frontend error handling so that when an admin signs in (admin password session + Internet Identity) but backend calls are still blocked (e.g., due to missing backend admin authorization), the UI shows a clear English error state explaining what is missing and how to proceed, rather than appearing non-functional.",
+      "featureId": "feature-update-the-admin-experience-to-always-show-a-clear-actionable-in-app-error-state-in-english-when-an-admin-action-fails-including-when-the-backend-returns-an-authorization-initialization-error-or-error-code-the-ui-must-display-1-a-human-friendly-title-message-2-the-raw-error-details-so-the-admin-can-report-the-exact-code-message-and-3-a-retry-action",
+      "featureTitle": "Update the admin experience to always show a clear, actionable in-app error state (in English) when an admin action fails, including when the backend returns an authorization/initialization error or “error code”. The UI must display: (1) a human-friendly title/message, (2) the raw error details (so the admin can report the exact code/message), and (3) a Retry action.",
       "files": [
         "frontend/src/components/AuthorizationErrorState.tsx",
-        "frontend/src/hooks/useAdminData.ts",
-        "frontend/src/hooks/useAudioLibrary.ts",
         "frontend/src/pages/AdminDashboardPage.tsx",
-        "frontend/src/pages/MixMasterPage.tsx",
-        "frontend/src/pages/MyAudioPage.tsx",
-        "frontend/src/pages/UserDashboardPage.tsx",
         "frontend/src/utils/authzErrors.ts"
       ],
       "components": [
@@ -24,7 +19,29 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-25"
+        "REQ-26"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-when-an-admin-has-an-active-admin-password-session-and-is-signed-in-with-internet-identity-but-backend-admin-only-calls-are-rejected-show-a-dedicated-admin-authorization-required-error-message-that-explicitly-explains-what-is-missing-and-how-to-proceed-in-english-including-mentioning-the-caffeineadmintoken-requirement",
+      "featureTitle": "When an admin has an active admin-password session and is signed in with Internet Identity but backend admin-only calls are rejected, show a dedicated ‘Admin authorization required’ error message that explicitly explains what is missing and how to proceed (in English), including mentioning the `caffeineAdminToken` requirement.",
+      "files": [
+        "frontend/src/components/AuthorizationErrorState.tsx",
+        "frontend/src/pages/AdminDashboardPage.tsx",
+        "frontend/src/utils/authzErrors.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-28"
       ],
       "confidence": "high"
     }

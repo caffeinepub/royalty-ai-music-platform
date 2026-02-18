@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 13,
+  "projectStateVersion": 15,
   "summary": "Expand the ROYALTY AI Music Platform from primarily UI/simulated music tools to a fully functional platform where admins and users can actually create/upload content and use real mixing/mastering features, in addition to fixing remaining admin post-login display issues.",
   "architectural_notes": [
     "Initial concept is a 3-page static HTML/CSS/JS site (landing, admin dashboard, user dashboard) with user data stored in browser localStorage; production version may later need a real backend for auth/data/payments.",
@@ -10,7 +10,8 @@
     "Sign-in flow is not working in production (user reports it won’t sign in / won’t allow starting to use the app).",
     "Admin login is not working for the user when entering the admin password `RoyaltyAdmin2026!` (cannot log in and use the site as admin).",
     "After successful admin login, nothing loads/pops up (admin sees a blank or non-updating view instead of the admin dashboard/content).",
-    "After signing in as admin, the user reports they cannot do anything (admin session appears non-functional / actions blocked)."
+    "After signing in as admin, the user reports they cannot do anything (admin session appears non-functional / actions blocked).",
+    "An error code is popping up during admin usage, preventing the admin from fully using the app (exact error code unspecified)."
   ],
   "isFixRequest": true,
   "existing_features": [
@@ -173,6 +174,22 @@
         "REQ-25"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-the-admin-experience-to-always-show-a-clear-actionable-in-app-error-state-in-english-when-an-admin-action-fails-including-when-the-backend-returns-an-authorization-initialization-error-or-error-code-the-ui-must-display-1-a-human-friendly-title-message-2-the-raw-error-details-so-the-admin-can-report-the-exact-code-message-and-3-a-retry-action",
+      "title": "Update the admin experience to always show a clear, actionable in-app error state (in English) when an admin action fails, including when the backend returns an authorization/initialization error or “error code”. The UI must display: (1) a human-friendly title/message, (2) the raw error details (so the admin can report the exact code/message), and (3) a Retry action.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-when-an-admin-has-an-active-admin-password-session-and-is-signed-in-with-internet-identity-but-backend-admin-only-calls-are-rejected-show-a-dedicated-admin-authorization-required-error-message-that-explicitly-explains-what-is-missing-and-how-to-proceed-in-english-including-mentioning-the-caffeineadmintoken-requirement",
+      "title": "When an admin has an active admin-password session and is signed in with Internet Identity but backend admin-only calls are rejected, show a dedicated ‘Admin authorization required’ error message that explicitly explains what is missing and how to proceed (in English), including mentioning the `caffeineAdminToken` requirement.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -231,6 +248,14 @@
       "summary": "Update the Motoko backend so that an authenticated admin principal can use core user flows (profile + exports + audio library) without being blocked by `#user` permission checks, and ensure access-control initialization does not break authenticated usage when the secret is empty.",
       "reqIds": [
         "REQ-24"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Ensure the backend access-control initialization path does not break authenticated usage when the `caffeineAdminToken` secret is missing/empty. Specifically, calling the backend’s access-control initialization with an empty string must not trap or prevent the actor from being created and used for normal authenticated flows.",
+      "reqIds": [
+        "REQ-27"
       ],
       "status": "pending"
     }
